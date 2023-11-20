@@ -2,9 +2,24 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
+	<LangVersion>preview</LangVersion>
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
+	
+  <ItemGroup>
+	<Compile Remove="CheeseyUtils\**" />
+	<EmbeddedResource Remove="CheeseyUtils\**" />
+	<None Remove="CheeseyUtils\**" />
+  </ItemGroup>
+	
+  <ItemGroup>
+    <PackageReference Include="CliWrap" Version="3.6.5-test" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="CheeseyUtils\CheeseyUtils.csproj" />
+  </ItemGroup>
 
 </Project>

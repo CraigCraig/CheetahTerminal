@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "CBash": {
+      "commandName": "Project",
+      "commandLineArgs": "install D:\\Environment\\CBash"
+    }
+  }
+}
