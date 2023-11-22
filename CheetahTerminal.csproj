@@ -19,7 +19,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="CheeseyUtils\CheeseyUtils.csproj" />
+    <EditorConfigFiles Remove=".editorconfig" />
+    <None Include=".editorconfig" />
   </ItemGroup>
 
 </Project>

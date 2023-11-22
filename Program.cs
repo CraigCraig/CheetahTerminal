@@ -1,4 +1,4 @@
-﻿namespace CBash;
+namespace CBash;
 
 using System.Threading.Tasks;
 
@@ -13,6 +13,8 @@ internal class Program
 {
 	static async Task Main(string[] rawArgs)
 	{
+		// TODO: Add -c argument for issuing commands.
+		// TODO: Add -i argument to indicate interactive
 		Console.Title = "CBash";
 		Console.WriteLine("CBash");
 
@@ -54,11 +56,18 @@ internal class Program
 
 			switch (cbCommand)
 			{
+				case "env":
+					break;
+				case "version":
+					break;
 				case "exit":
 					return;
+				case "":
+					break;
 				default:
 					Console.WriteLine(await Shell.ExecuteAsync(cbCommand, cbArgs));
 					break;
+
 			}
 		}
 	}
