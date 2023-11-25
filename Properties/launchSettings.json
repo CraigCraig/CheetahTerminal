@@ -1,8 +1,12 @@
 {
   "profiles": {
-    "CBash": {
+    "CTerm Debug": {
       "commandName": "Project",
-      "commandLineArgs": "install D:\\Environment\\CBash"
+      "commandLineArgs": ""
+    },
+    "CTerm - Install": {
+      "commandName": "Project",
+      "commandLineArgs": "install D:\\Applications\\CTerm"
     }
   }
 }

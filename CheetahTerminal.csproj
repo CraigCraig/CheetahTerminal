@@ -1,26 +1,35 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <OutputType>Exe</OutputType>
-	<LangVersion>preview</LangVersion>
     <TargetFramework>net8.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+	<LangVersion>latest</LangVersion>
+	<Platforms>Windows;Linux</Platforms>
+	<Configurations>Debug;Release</Configurations>
+    <AssemblyVersion>1.0.0</AssemblyVersion>
+    <OutputType>Exe</OutputType>
   </PropertyGroup>
 	
+    <PropertyGroup Condition="'$(Platform)' == 'Windows' ">
+	    <DefineConstants>WINDOWS</DefineConstants>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Platform)' == 'Linux' ">
+	    <DefineConstants>LINUX</DefineConstants>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <Compile Remove="Applications\**" />
+      <EmbeddedResource Remove="Applications\**" />
+      <None Remove="Applications\**" />
+    </ItemGroup>
+
   <ItemGroup>
-	<Compile Remove="CheeseyUtils\**" />
-	<EmbeddedResource Remove="CheeseyUtils\**" />
-	<None Remove="CheeseyUtils\**" />
-  </ItemGroup>
-	
-  <ItemGroup>
-    <PackageReference Include="CliWrap" Version="3.6.5-test" />
+    <ProjectReference Include="..\CheetahApp\CheetahApp.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <EditorConfigFiles Remove=".editorconfig" />
-    <None Include=".editorconfig" />
+    <Folder Include="Modules\" />
   </ItemGroup>
 
 </Project>
