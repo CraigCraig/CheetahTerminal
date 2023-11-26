@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34310.174
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CheetahTerminal", "CheetahTerminal.csproj", "{B6DDB00F-8573-4647-BF33-F6949E752926}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Linux = Debug|Linux
+		Debug|Windows = Debug|Windows
+		Release|Linux = Release|Linux
+		Release|Windows = Release|Windows
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B6DDB00F-8573-4647-BF33-F6949E752926}.Debug|Linux.ActiveCfg = Debug|Linux
+		{B6DDB00F-8573-4647-BF33-F6949E752926}.Debug|Linux.Build.0 = Debug|Linux
+		{B6DDB00F-8573-4647-BF33-F6949E752926}.Debug|Windows.ActiveCfg = Debug|Windows
+		{B6DDB00F-8573-4647-BF33-F6949E752926}.Debug|Windows.Build.0 = Debug|Windows
+		{B6DDB00F-8573-4647-BF33-F6949E752926}.Release|Linux.ActiveCfg = Release|Linux
+		{B6DDB00F-8573-4647-BF33-F6949E752926}.Release|Linux.Build.0 = Release|Linux
+		{B6DDB00F-8573-4647-BF33-F6949E752926}.Release|Windows.ActiveCfg = Release|Windows
+		{B6DDB00F-8573-4647-BF33-F6949E752926}.Release|Windows.Build.0 = Release|Windows
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {3ABFE3E5-BA59-405B-B7D8-D5E305825E71}
+	EndGlobalSection
+EndGlobal
