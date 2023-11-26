@@ -1,45 +1,56 @@
 namespace CheetahTerminal;
 
-using CheetahApp;
+using System;
+using CheetahTerminal.Modules;
 
-public class Terminal : ConsoleApp
+public class Terminal
 {
-    /// <summary>
-    /// The core terminal application
-    /// </summary>
-    public static ConsoleApp? Core { get; private set; }
+    public ScreenManager ScreenManager { get; private set; }
+    public ModuleManager ModuleManager { get; private set; }
 
-    public Terminal() : base(new(), new())
+    private bool _isClosing = false;
+
+    public Terminal()
     {
-        Core = this;
+        Console.CursorVisible = true;
+        ScreenManager = new ScreenManager(this);
+        ModuleManager = new ModuleManager(this);
     }
 
-    public override void Start()
+    public void Start()
     {
-        base.Start();
-        Core?.Start();
+        Console.TreatControlCAsInput = true;
+        Console.Title = $"CTerm: {ScreenManager.CurrentID}";
+
+        Console.CancelKeyPress += (sender, e) =>
+        {
+            e.Cancel = true;
+        };
+
+        ScreenManager.Start();
+        ModuleManager.Start();
+
+        while (true)
+        {
+            if (_isClosing) break;
+            Update();
+        }
     }
 
-    public override void Update()
+    public void Update()
     {
-        base.Update();
-        Core?.Update();
+        if (Console.KeyAvailable)
+        {
+            ScreenManager.HandleKeyPress();
+        }
+
+        ScreenManager.Draw();
     }
 
-    public override void Command(CommandContext context)
+    public void Close()
     {
-        base.Command(context);
-    }
-
-    public override void Close()
-    {
-        base.Close();
-        Core?.Close();
-    }
-
-    public static void Main(string[] args)
-    {
-        Core = new ConsoleApp(new(), new());
-        Core.Start();
+        _isClosing = true;
+        ScreenManager.Close();
+        ModuleManager.Close();
     }
 }

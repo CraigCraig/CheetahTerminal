@@ -1,0 +1,11 @@
+﻿namespace CheetahTerminal.Modules.Core.Commands;
+
+using CheetahTerminal.Commands;
+
+public class Test() : Command("test", "test")
+{
+    public override CommandResult Execute(CommandContext context)
+    {
+        return new CommandResult(true, "Commands Work");
+    }
+}

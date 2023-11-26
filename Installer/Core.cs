@@ -1,6 +1,6 @@
 namespace CheetahTerminal.Installer;
 
-using CheetahUtils;
+using CheetahTerminal;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -11,7 +11,7 @@ public static class Core
 {
     public static void Install(string path)
     {
-        Log.WriteLine("Installing CBash..");
+        Console.WriteLine("Installing CBash..");
         Stopwatch stopwatch = Stopwatch.StartNew();
         string binPath = Path.Combine(Environment.CurrentDirectory, "bin\\Release\\net8.0");
 
@@ -66,7 +66,7 @@ public static class Core
             Console.WriteLine(e);
         }
 
-        Console.WriteLine(Terminal.Execute("dotnet", ["CBash.exe", "install"]));
+        Console.WriteLine(NativeShell.Execute("dotnet", ["CBash.exe", "install"]));
         stopwatch.Stop();
         Console.WriteLine("Done Installing CBash!");
         Console.WriteLine($"Time Elapsed: {stopwatch.ElapsedMilliseconds}ms");

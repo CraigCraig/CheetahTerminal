@@ -8,7 +8,7 @@
 	<Configurations>Debug;Release</Configurations>
     <AssemblyVersion>1.0.0</AssemblyVersion>
     <OutputType>Exe</OutputType>
-    <AssemblyName>Terminal</AssemblyName>
+    <AssemblyName>CTerm</AssemblyName>
     <RootNamespace>CheetahTerminal</RootNamespace>
   </PropertyGroup>
 	
@@ -21,17 +21,13 @@
     </PropertyGroup>
 
 	<ItemGroup>
-	  <Compile Remove="publish\**" />
-	  <EmbeddedResource Remove="publish\**" />
-	  <None Remove="publish\**" />
+	  <Compile Remove="Applications\**" />
+	  <EmbeddedResource Remove="Applications\**" />
+	  <None Remove="Applications\**" />
 	</ItemGroup>
 	
   <ItemGroup>
     <Folder Include="Modules\" />
-  </ItemGroup>
-	
-  <ItemGroup>
-    <PackageReference Include="CliWrap" Version="3.6.4" />
   </ItemGroup>
 
 </Project>
