@@ -3,22 +3,22 @@
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
-	<LangVersion>latest</LangVersion>
-	<Platforms>Windows;Linux</Platforms>
-	<Configurations>Debug;Release</Configurations>
+    <LangVersion>latest</LangVersion>
+    <Platforms>Windows;Linux</Platforms>
+    <Configurations>Debug;Release</Configurations>
     <AssemblyVersion>1.0.0</AssemblyVersion>
     <OutputType>Exe</OutputType>
     <AssemblyName>Terminal</AssemblyName>
     <RootNamespace>CheetahTerminal</RootNamespace>
   </PropertyGroup>
 	
-    <PropertyGroup Condition="'$(Platform)' == 'Windows' ">
-	    <DefineConstants>WINDOWS</DefineConstants>
-    </PropertyGroup>
+  <PropertyGroup Condition="'$(Platform)' == 'Windows' ">
+	  <DefineConstants>WINDOWS</DefineConstants>
+  </PropertyGroup>
 
-    <PropertyGroup Condition="'$(Platform)' == 'Linux' ">
-	    <DefineConstants>LINUX</DefineConstants>
-    </PropertyGroup>
+  <PropertyGroup Condition="'$(Platform)' == 'Linux' ">
+	  <DefineConstants>LINUX</DefineConstants>
+  </PropertyGroup>
 
 	<ItemGroup>
 	  <Compile Remove="Projects\**" />

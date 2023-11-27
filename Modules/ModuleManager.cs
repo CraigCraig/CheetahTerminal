@@ -75,7 +75,7 @@ public class ModuleManager(Terminal terminal)
         return null;
     }
 
-    internal CommandResult? ExecuteCommand(string moduleName, string[] cmdArgs)
+    internal CommandResult? ExecuteCommand(Screen screen, string moduleName, string[] cmdArgs)
     {
         var module = GetModule(moduleName);
 
@@ -85,7 +85,7 @@ public class ModuleManager(Terminal terminal)
         }
 
         var cmd = cmdArgs[0];
-        var result = module.CommandHandler?.HandleCommand(cmd, cmdArgs);
+        var result = module.CommandHandler?.HandleCommand(screen, cmd, cmdArgs);
         return result;
     }
 }

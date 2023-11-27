@@ -3,9 +3,6 @@ namespace CheetahTerminal;
 #region Using Statements
 using System;
 using System.Threading;
-#if DEBUG
-using CheetahTerminal.Debugging;
-#endif
 using CheetahTerminal.Modules;
 #endregion
 
@@ -16,7 +13,7 @@ public class Terminal
 
     private bool _isClosing;
 
-    public Terminal()
+    public Terminal(string[] args)
     {
         Console.CursorVisible = false;
         ScreenManager = new ScreenManager(this);
@@ -36,11 +33,10 @@ public class Terminal
 
         Console.Title = $"CTerm: {ScreenManager.CurrentID}";
 
-#if DEBUG
-        if (Debug.Enabled)
-        {
-            Debug.Initialize();
-        }
+#if DEBUG && WINDOWS
+#pragma warning disable CA1416 // Validate platform compatibility
+        Console.Title += " (D)";
+#pragma warning restore CA1416 // Validate platform compatibility
 #endif
 
         while (true)

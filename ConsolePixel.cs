@@ -37,11 +37,8 @@ public class ConsolePixel(Vector2i position, char character, ConsoleColor foregr
         }
         set
         {
-            if (_foregroundColor != value)
-            {
-                IsDirty = true;
-                _foregroundColor = value;
-            }
+            IsDirty = true;
+            _foregroundColor = value;
         }
     }
 

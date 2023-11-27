@@ -3,28 +3,38 @@
 using System;
 using System.Text;
 
-public partial class Screen(Terminal terminal, int id)
+public partial class Screen
 {
-    public int Id = id;
-    private readonly Terminal _terminal = terminal;
-    private bool _isDirty = true;
+    public int Id;
+    private readonly Terminal terminal;
 
-    private readonly StringBuilder _input = new();
-    private StringBuilder _last_input = new();
+    private readonly StringBuilder input = new();
 
-    private readonly string _currentDirectory = Environment.CurrentDirectory;
+    public string CurrentDirectory = string.Empty;
 
     public readonly LineArea Header = new(0);
     //public readonly DrawArea Output = new(new(), new());
     public readonly LineArea Prompt = new(1, true);
 
-    public Vector2i CursorInputPosition = new(); // UNDONE: This is not used yet
+    public Vector2i CursorInputPosition = new();
 
     private int width = Console.BufferWidth;
     private int height = Console.BufferHeight;
 
+    public Screen(Terminal _terminal, int _id)
+    {
+        Id = _id;
+        terminal = _terminal;
+        if (string.IsNullOrEmpty(CurrentDirectory))
+        {
+            CurrentDirectory = Environment.CurrentDirectory;
+        }
+    }
+
     internal void HandleKeyPress()
     {
+        Console.SetCursorPosition(CursorInputPosition.X, CursorInputPosition.Y);
+
         var keyInfo = Console.ReadKey();
         var key = keyInfo.Key;
         var keyChar = keyInfo.KeyChar;
@@ -46,10 +56,9 @@ public partial class Screen(Terminal terminal, int id)
 
         if (key == ConsoleKey.Backspace)
         {
-            _isDirty = true;
-            if (_input.Length > 0)
+            if (input.Length > 0)
             {
-                _input.Remove(_input.Length - 1, 1);
+                input.Remove(input.Length - 1, 1);
                 return;
             }
         }
@@ -61,7 +70,6 @@ public partial class Screen(Terminal terminal, int id)
 
         if (key == ConsoleKey.Tab)
         {
-            _isDirty = true;
             return;
         }
 
@@ -77,26 +85,19 @@ public partial class Screen(Terminal terminal, int id)
 
         if (key == ConsoleKey.Enter)
         {
-            _isDirty = true;
-            if (_input.Length == 0) { return; }
+            if (input.Length == 0) { return; }
             //Output.Add(_input.ToString());
 
-            var cmd = _input.ToString().Split(' ')[0];
-            var args = _input.ToString().Split(' ')[1..];
-            var result = _terminal.ModuleManager.ExecuteCommand(cmd, args);
-            Prompt.Clear();
+            var module = input.ToString().Split(' ')[0];
+            var lines = input.ToString().Split(' ')[1..];
+            var result = terminal.ModuleManager.ExecuteCommand(this, module, lines);
             //Output.Add($"{result?.Message}");
-            _input.Clear();
+            input.Clear();
             return;
         }
 
-        _input.Append(keyChar);
-
-        if (!_last_input.Equals(_input))
-        {
-            _last_input = _input;
-            _isDirty = true;
-        }
+        input.Append(keyChar);
+        Prompt.Redraw();
     }
 
     internal void Draw()
@@ -107,19 +108,21 @@ public partial class Screen(Terminal terminal, int id)
         {
             width = Console.BufferWidth;
             height = Console.BufferHeight;
-            _isDirty = true;
         }
 
         // Draw Header
-        Header.Text = $"{DateTime.Now}";
+        Header.Text = $"CTerm: {Id} - {DateTime.Now}";
         Header.Draw();
 
         // Draw Output Area
         //OutputArea.Draw();
 
         // Draw Prompt
-        Prompt.Text = $"test@nightly > {_input}";
+        Prompt.Text = $"{CurrentDirectory} > {input}";
         Prompt.Draw();
+
+        CursorInputPosition.X = Prompt.area.Position.X + Prompt.Text.Length + 1;
+        CursorInputPosition.Y = Prompt.area.Position.Y + 1;
     }
 
     internal void Close()

@@ -3,9 +3,6 @@
 #region Using Statements
 using System;
 using System.Collections.Generic;
-#if DEBUG
-using CheetahTerminal.Debugging;
-#endif
 #endregion
 
 /// <summary>
@@ -82,23 +79,19 @@ public class DrawArea(Vector2i position, Vector2i size, bool pinToBottom = false
             WriteAt(new Vector2i(tmpX, position.Y), c);
             tmpX++;
         }
+
+        if (tmpX < Size.X)
+        {
+            for (int i = tmpX; i < Size.X; i++)
+            {
+                WriteAt(new Vector2i(i, position.Y), ' ');
+            }
+        }
     }
 
     internal void WriteAt(Vector2i position, char c, ConsoleColor? color = null)
     {
         ConsoleColor fColor = ConsoleColor.Gray;
-
-        if (color != null)
-        {
-            fColor = color.Value;
-        }
-
-#if DEBUG
-        if (Debug.RandomColors)
-        {
-            fColor = (ConsoleColor) Random.Shared.Next(0, 16);
-        }
-#endif
 
         // Check if text overflows the draw area and console
         if (position.X > Size.X) { return; }
@@ -112,14 +105,24 @@ public class DrawArea(Vector2i position, Vector2i size, bool pinToBottom = false
 
         // Check if Pixel is in PixelBuffer, if not create it
         Vector2i ppos = new(position.X, position.Y);
-        if (!PixelBuffer.TryGetValue(ppos, out ConsolePixel? value))
+
+        if (color != null)
+        {
+            fColor = color.Value;
+        }
+
+        PixelBuffer.TryGetValue(ppos, out ConsolePixel? value);
+
+        if (value == null)
         {
             PixelBuffer.Add(ppos, new ConsolePixel(ppos, c, fColor, ConsoleColor.Black));
         }
         else
         {
-            //value.Character = c;
-            //value.ForegroundColor = fColor;
+            if (value.Character != c)
+            {
+                value.Character = c;
+            }
         }
     }
 

@@ -19,7 +19,7 @@ public class CommandHandler(Terminal terminal, Module module)
     {
     }
 
-    public CommandResult? HandleCommand(string command, string[] arguments)
+    public CommandResult? HandleCommand(Screen screen, string command, string[] arguments)
     {
         if (string.IsNullOrEmpty(command))
         {
@@ -30,7 +30,7 @@ public class CommandHandler(Terminal terminal, Module module)
         {
             if (cmd.Name == command)
             {
-                return cmd.Execute(new CommandContext(Module, command, arguments));
+                return cmd.Execute(new CommandContext(Module, screen, command, arguments));
             }
         }
 

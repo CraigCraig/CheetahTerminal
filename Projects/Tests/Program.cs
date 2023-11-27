@@ -1,8 +1,13 @@
 ﻿namespace Tests;
 
-internal class Program
+public class Program
 {
-    static void Main(string[] args)
+    static void Main()
     {
     }
+}
+
+public partial class WindowsUtils
+{
+
 }

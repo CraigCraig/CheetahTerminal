@@ -25,9 +25,13 @@ public class LineArea(int y, bool pinToBottom = false)
         area.Draw();
     }
 
-    public void Clear()
+    /// <summary>
+    /// Redraw the line area
+    /// </summary>
+    public void Redraw()
     {
-        _text = string.Empty;
         area.Clear();
+        area.Write(Text);
+        area.Draw();
     }
 }
