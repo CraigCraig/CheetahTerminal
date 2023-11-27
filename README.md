@@ -1,13 +1,16 @@
 <div align="center">
 
-# CheetahTerminal
-:warning: Work in Progress :warning:
+# CheetahTerminal :smirk_cat:
+## :warning: Work in Progress :warning:
+This project is still in development and is not ready for use.
 
-<div align="left">
-This is a Terminal I wrote mainly for personal use.<br>
-I thought it would be a fun idea to make a little virtual system as a workspace.<br>
-I wanted the challenge and flexibility of not using another solution like Cygwin.<br>
-</div>
+## Description
+
+A terminal with a custom shell and a custom scripting language.<br>
+Includes a plugin and module system.<br>
+Includes a virtual screen system.<br>
+Includes the ability to update the screen live.<br>
+With more to come<br>
 
 ## Contributing
 
