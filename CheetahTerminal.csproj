@@ -8,9 +8,11 @@
     <Configurations>Debug;Release</Configurations>
     <AssemblyVersion>1.0.0</AssemblyVersion>
     <OutputType>Exe</OutputType>
-    <AssemblyName>Terminal</AssemblyName>
+    <AssemblyName>CheetahTerminal</AssemblyName>
     <RootNamespace>CheetahTerminal</RootNamespace>
     <OutputPath>bin\$(Platform)\$(Configuration)\</OutputPath>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
   </PropertyGroup>
 	
   <PropertyGroup Condition="'$(Platform)' == 'Windows' ">
@@ -37,6 +39,10 @@
 	
   <ItemGroup>
     <PackageReference Include="CliWrap" Version="3.6.4" />
+  </ItemGroup>
+	
+  <ItemGroup>
+    <ProjectReference Include="Projects\Dependencies\CheetahUtils\CheetahUtils.csproj" />
   </ItemGroup>
 
 </Project>
