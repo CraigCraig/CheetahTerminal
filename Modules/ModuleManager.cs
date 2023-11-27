@@ -3,6 +3,7 @@
 #region Using Statements
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Reflection;
 using CheetahTerminal.Commands;
 #endregion
@@ -15,6 +16,14 @@ public class ModuleManager(Terminal terminal)
     public void Start()
     {
         // TODO: Load modules from DLLs
+        var pluginsPath = FolderPaths.Plugins;
+        foreach (var entry in Directory.GetFiles(pluginsPath))
+        {
+            if (entry.EndsWith(".plugin.dll"))
+            {
+                var assembly = Assembly.LoadFile(entry);
+            }
+        }
 
         // Load modules from all assemblies
         var assemblies = AppDomain.CurrentDomain.GetAssemblies();
