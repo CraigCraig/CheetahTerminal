@@ -7,49 +7,49 @@ using System;
 /// </summary>
 public class ConsolePixel(Vector2i position, char character, ConsoleColor foregroundColor, ConsoleColor backgroundColor)
 {
-    public bool IsDirty = true;
-    private readonly Vector2i _position = position;
-    private readonly ConsoleColor _backgroundColor = backgroundColor;
+	public bool IsDirty = true;
+	private readonly Vector2i _position = position;
+	private readonly ConsoleColor _backgroundColor = backgroundColor;
 
-    private char _character = character;
-    public char Character
-    {
-        get
-        {
-            return _character;
-        }
-        set
-        {
-            if (_character != value)
-            {
-                IsDirty = true;
-                _character = value;
-            }
-        }
-    }
+	private char _character = character;
+	public char Character
+	{
+		get
+		{
+			return _character;
+		}
+		set
+		{
+			if (_character != value)
+			{
+				IsDirty = true;
+				_character = value;
+			}
+		}
+	}
 
-    private ConsoleColor _foregroundColor = foregroundColor;
-    public ConsoleColor ForegroundColor
-    {
-        get
-        {
-            return _foregroundColor;
-        }
-        set
-        {
-            IsDirty = true;
-            _foregroundColor = value;
-        }
-    }
+	private ConsoleColor _foregroundColor = foregroundColor;
+	public ConsoleColor ForegroundColor
+	{
+		get
+		{
+			return _foregroundColor;
+		}
+		set
+		{
+			IsDirty = true;
+			_foregroundColor = value;
+		}
+	}
 
-    public void Draw()
-    {
-        if (!IsDirty) { return; }
-        IsDirty = false;
+	public void Draw()
+	{
+		if (!IsDirty) { return; }
+		IsDirty = false;
 
-        Console.ForegroundColor = _foregroundColor;
-        Console.BackgroundColor = _backgroundColor;
-        Console.SetCursorPosition(_position.X, _position.Y);
-        Console.Write(_character);
-    }
+		Console.ForegroundColor = _foregroundColor;
+		Console.BackgroundColor = _backgroundColor;
+		Console.SetCursorPosition(_position.X, _position.Y);
+		Console.Write(_character);
+	}
 }

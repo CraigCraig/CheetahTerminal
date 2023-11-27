@@ -2,6 +2,6 @@
 
 public enum DrawDirection
 {
-    Up,
-    Down
+	Up,
+	Down
 }

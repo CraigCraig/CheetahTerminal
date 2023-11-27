@@ -7,40 +7,40 @@ using Module = Modules.Module;
 
 public class CommandHandler(Terminal terminal, Module module)
 {
-    private readonly Terminal _terminal = terminal;
-    public readonly Module Module = module;
-    private readonly List<Command> _commands = [];
+	private readonly Terminal _terminal = terminal;
+	public readonly Module Module = module;
+	private readonly List<Command> _commands = [];
 
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1822:Mark members as static", Justification = "WIP")]
-    public void Start()
-    {
-    }
+	[System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1822:Mark members as static", Justification = "WIP")]
+	public void Start()
+	{
+	}
 
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1822:Mark members as static", Justification = "WIP")]
-    public void Stop()
-    {
-    }
+	[System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1822:Mark members as static", Justification = "WIP")]
+	public void Stop()
+	{
+	}
 
-    public CommandResult? HandleCommand(Screen screen, string command, string[] arguments)
-    {
-        if (string.IsNullOrEmpty(command))
-        {
-            return new CommandResult(false, "Command is null or empty");
-        }
+	public CommandResult? HandleCommand(Screen screen, string command, string[] arguments)
+	{
+		if (string.IsNullOrEmpty(command))
+		{
+			return new CommandResult(false, "Command is null or empty");
+		}
 
-        foreach (var cmd in _commands)
-        {
-            if (cmd.Name == command)
-            {
-                return cmd.Execute(new CommandContext(Module, screen, command, arguments));
-            }
-        }
+		foreach (var cmd in _commands)
+		{
+			if (cmd.Name == command)
+			{
+				return cmd.Execute(new CommandContext(Module, screen, command, arguments));
+			}
+		}
 
-        return new CommandResult(false, $"Command not found: {command}");
-    }
+		return new CommandResult(false, $"Command not found: {command}");
+	}
 
-    public void AddCommand(Command command)
-    {
-        _commands.Add(command);
-    }
+	public void AddCommand(Command command)
+	{
+		_commands.Add(command);
+	}
 }
