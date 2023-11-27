@@ -16,38 +16,42 @@ public class ModuleManager(Terminal terminal)
     {
         // TODO: Load modules from DLLs
 
-        // Load modules from this assembly
-        var assembly = Assembly.GetExecutingAssembly();
-        var types = assembly.GetTypes();
-        foreach (var type in types)
+        // Load modules from all assemblies
+        var assemblies = AppDomain.CurrentDomain.GetAssemblies();
+        foreach (var assembly in assemblies)
         {
-            if (type.BaseType == null || type.BaseType.FullName == null) continue;
-            if (type.BaseType.FullName.Equals(nameof(Module)))
+            var types = assembly.GetTypes();
+            foreach (var type in types)
             {
-                if (type == null || string.IsNullOrEmpty(type.FullName)) continue;
-                if (assembly.FullName == null) continue;
-                if (assembly.CreateInstance(type.FullName) is Module module)
+                if (type.BaseType == null || type.BaseType.FullName == null) continue;
+                if (type.BaseType.FullName.Equals(typeof(Module).FullName))
                 {
-                    module.SetTerminal(Terminal);
-                    Modules.Add(module);
-#if DEBUG
-                    Terminal.ScreenManager.CurrentScreen.Output.Add($"Module Loaded: {module.Name}");
-#endif
-
-                    // Add Commands from Modules Namespace
-                    var commands = type.GetNestedTypes();
-
-                    foreach (var test in commands)
+                    if (type == null || string.IsNullOrEmpty(type.FullName)) continue;
+                    if (assembly.FullName == null) continue;
+                    if (assembly.CreateInstance(type.FullName) is Module module)
                     {
-                        Terminal.ScreenManager.CurrentScreen.Output.Add($"{test}");
+                        module.SetTerminal(Terminal);
+                        Modules.Add(module);
+
+                        // Add Commands from Modules Namespace
+                        foreach (var type2 in types)
+                        {
+                            if (type2.BaseType == null || type2.BaseType.FullName == null) continue;
+                            if (!type2.BaseType.FullName.Equals(typeof(Command).FullName)) continue;
+                            {
+                                if (type2 == null || string.IsNullOrEmpty(type2.FullName)) continue;
+                                if (assembly.CreateInstance(type2.FullName) is not Command command) continue;
+                                module.AddCommand(command);
+                            }
+                        }
                     }
                 }
             }
-        }
 
-        foreach (var module in Modules)
-        {
-            module.Start();
+            foreach (var module in Modules)
+            {
+                module.Start();
+            }
         }
     }
 
@@ -81,7 +85,7 @@ public class ModuleManager(Terminal terminal)
         }
 
         var cmd = cmdArgs[0];
-        var result = module.CommandHandler.HandleCommand(cmd, cmdArgs);
+        var result = module.CommandHandler?.HandleCommand(cmd, cmdArgs);
         return result;
     }
 }

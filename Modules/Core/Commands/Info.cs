@@ -1,10 +1,8 @@
-﻿using CheetahTerminal.Commands;
+﻿namespace CheetahTerminal.Modules.Core.Commands;
 
-namespace CheetahTerminal.Modules.Core.Commands;
+using CheetahTerminal.Commands;
+
 public class Info() : Command("info", "")
 {
-    public override CommandResult Execute(CommandContext context)
-    {
-        return new CommandResult(true, "Info");
-    }
+    public override CommandResult Execute(CommandContext context) => new(true, "Info");
 }

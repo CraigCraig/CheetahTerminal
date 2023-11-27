@@ -1,18 +1,24 @@
 namespace CheetahTerminal;
 
+#region Using Statements
 using System;
+using System.Threading;
+#if DEBUG
+using CheetahTerminal.Debugging;
+#endif
 using CheetahTerminal.Modules;
+#endregion
 
 public class Terminal
 {
     public ScreenManager ScreenManager { get; private set; }
     public ModuleManager ModuleManager { get; private set; }
 
-    private bool _isClosing = false;
+    private bool _isClosing;
 
     public Terminal()
     {
-        Console.CursorVisible = true;
+        Console.CursorVisible = false;
         ScreenManager = new ScreenManager(this);
         ModuleManager = new ModuleManager(this);
     }
@@ -20,8 +26,6 @@ public class Terminal
     public void Start()
     {
         Console.TreatControlCAsInput = true;
-        Console.Title = $"CTerm: {ScreenManager.CurrentID}";
-
         Console.CancelKeyPress += (sender, e) =>
         {
             e.Cancel = true;
@@ -30,10 +34,20 @@ public class Terminal
         ScreenManager.Start();
         ModuleManager.Start();
 
+        Console.Title = $"CTerm: {ScreenManager.CurrentID}";
+
+#if DEBUG
+        if (Debug.Enabled)
+        {
+            Debug.Initialize();
+        }
+#endif
+
         while (true)
         {
             if (_isClosing) break;
             Update();
+            Thread.Sleep(1);
         }
     }
 

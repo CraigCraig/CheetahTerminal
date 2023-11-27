@@ -21,14 +21,18 @@
     </PropertyGroup>
 
 	<ItemGroup>
+	  <Compile Remove="Projects\**" />
 	  <Compile Remove="publish\**" />
+	  <EmbeddedResource Remove="Projects\**" />
 	  <EmbeddedResource Remove="publish\**" />
+	  <None Remove="Projects\**" />
 	  <None Remove="publish\**" />
 	</ItemGroup>
-	
-  <ItemGroup>
-    <Folder Include="Modules\" />
-  </ItemGroup>
+
+	<ItemGroup>
+	  <None Remove="CheetahTerminal.sln.startup.json" />
+	  <None Remove="CheetahTerminal.slnLaunch" />
+	</ItemGroup>
 	
   <ItemGroup>
     <PackageReference Include="CliWrap" Version="3.6.4" />

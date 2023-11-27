@@ -3,7 +3,7 @@
 using System;
 using System.Text;
 
-public class Screen(Terminal terminal, int id)
+public partial class Screen(Terminal terminal, int id)
 {
     public int Id = id;
     private readonly Terminal _terminal = terminal;
@@ -14,8 +14,11 @@ public class Screen(Terminal terminal, int id)
 
     private readonly string _currentDirectory = Environment.CurrentDirectory;
 
-    public readonly ConsoleBuffer Header = new(DrawDirection.Down);
-    public readonly ConsoleBuffer Output = new(DrawDirection.Up);
+    public readonly LineArea Header = new(0);
+    //public readonly DrawArea Output = new(new(), new());
+    public readonly LineArea Prompt = new(1, true);
+
+    public Vector2i CursorInputPosition = new(); // UNDONE: This is not used yet
 
     private int width = Console.BufferWidth;
     private int height = Console.BufferHeight;
@@ -28,7 +31,6 @@ public class Screen(Terminal terminal, int id)
 
         if (key == ConsoleKey.UpArrow)
         {
-            Output.Add($"History not functional yet");
             return;
         }
 
@@ -37,8 +39,8 @@ public class Screen(Terminal terminal, int id)
             switch (key)
             {
                 case ConsoleKey.D1:
-                    Output.Add("Screen switching not functional yet.");
                     return;
+                    // TODO: Handle D2 - D9
             }
         }
 
@@ -59,19 +61,31 @@ public class Screen(Terminal terminal, int id)
 
         if (key == ConsoleKey.Tab)
         {
+            _isDirty = true;
             return;
         }
+
+#if WINDOWS
+        if (key == ConsoleKey.F1)
+        {
+#pragma warning disable CA1416 // Validate platform compatibility
+            Console.CursorVisible = !Console.CursorVisible;
+#pragma warning restore CA1416 // Validate platform compatibility
+            return;
+        }
+#endif
 
         if (key == ConsoleKey.Enter)
         {
             _isDirty = true;
             if (_input.Length == 0) { return; }
-            Output.Add(_input.ToString());
+            //Output.Add(_input.ToString());
 
             var cmd = _input.ToString().Split(' ')[0];
             var args = _input.ToString().Split(' ')[1..];
             var result = _terminal.ModuleManager.ExecuteCommand(cmd, args);
-            Output.Add($"{result?.Message}");
+            Prompt.Clear();
+            //Output.Add($"{result?.Message}");
             _input.Clear();
             return;
         }
@@ -87,32 +101,29 @@ public class Screen(Terminal terminal, int id)
 
     internal void Draw()
     {
-        if (Output.IsDirty)
+        // TODO: Add different screen layouts
+
+        if (width != Console.BufferWidth || height != Console.BufferHeight)
         {
+            width = Console.BufferWidth;
+            height = Console.BufferHeight;
             _isDirty = true;
-            Output.IsDirty = false;
         }
-        if (!_isDirty) { return; }
-        _isDirty = false;
 
-        Console.Clear();
+        // Draw Header
+        Header.Text = $"{DateTime.Now}";
+        Header.Draw();
 
-        // Display Header - Pinned To Top
-        Header.Clear();
-        Header.Add($"CTerm v1.0.0-nightly (Dev) - Screen: {Id}");
-        Header.Add("-- -- -- -- -- -- -- -- -- -- -- --");
-        Header.Draw(0, 0);
+        // Draw Output Area
+        //OutputArea.Draw();
 
-        // Display Output
-        Output.Draw(0, height - 2);
+        // Draw Prompt
+        Prompt.Text = $"test@nightly > {_input}";
+        Prompt.Draw();
+    }
 
-        // Update Cursor Position
-        if (height <= 0) { height = 1; }
-        if (height > 30) { height = 30; }
-        Console.SetCursorPosition(0, height - 1);
-        string prompt = $"test@nightly > {_input}";
-        Console.Write(prompt);
-        Console.SetCursorPosition(prompt.Length, height - 1);
-        Console.Title = $"CTerm Screen: {Id}";
+    internal void Close()
+    {
+        throw new NotImplementedException();
     }
 }

@@ -30,9 +30,6 @@ public class Module
     {
         if (CommandHandler == null) throw new NullReferenceException(nameof(CommandHandler));
         CommandHandler.Start();
-#if DEBUG
-        Console.WriteLine($"Module Started: {Name}");
-#endif
     }
 
     public virtual void Stop()
