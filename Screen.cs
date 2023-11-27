@@ -2,6 +2,7 @@
 
 using System;
 using System.Text;
+using CheetahUtils;
 
 public partial class Screen
 {

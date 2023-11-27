@@ -1,6 +1,6 @@
 ﻿namespace CheetahTerminal;
 
-using System;
+using CheetahUtils;
 
 public class LineArea(int y, bool pinToBottom = false)
 {

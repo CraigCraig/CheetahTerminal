@@ -11,11 +11,10 @@ using CheetahTerminal.Commands;
 public class Module(ModuleInfo info)
 {
 	public Terminal? Terminal { get; private set; }
-	public bool IsCore { get; private set; } = false;
 	public ModuleInfo Info { get; private set; } = info;
 	public CommandHandler? CommandHandler { get; private set; }
 
-	public void SetTerminal(Terminal terminal)
+	internal void SetTerminal(Terminal terminal)
 	{
 		Terminal = terminal;
 		CommandHandler = new(terminal, this);
@@ -33,7 +32,7 @@ public class Module(ModuleInfo info)
 		CommandHandler.Stop();
 	}
 
-	public void AddCommand(Command command)
+	internal void AddCommand(Command command)
 	{
 		if (CommandHandler == null) throw new NullReferenceException(nameof(CommandHandler));
 		CommandHandler.AddCommand(command);

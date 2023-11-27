@@ -1,6 +1,7 @@
 ﻿namespace CheetahTerminal;
 
 using System;
+using CheetahUtils;
 
 /// <summary>
 /// <br>A console pixel is a single character on the screen.</br>
