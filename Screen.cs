@@ -58,8 +58,10 @@ public partial class Screen
 					terminal.ScreenManager.SwitchScreen(3);
 					return;
 				case ConsoleKey.RightArrow:
+					terminal.ScreenManager.SwitchRight();
 					return;
 				case ConsoleKey.LeftArrow:
+					terminal.ScreenManager.SwitchLeft();
 					return;
 			}
 		}
@@ -126,7 +128,11 @@ public partial class Screen
 #if DEBUG
 			$" (Debug)" +
 #endif
-			$" - Screen: {Id} - {DateTime.Now}";
+			$" - Screen: {Id} - {DateTime.Now}" +
+#if DEBUG
+			$" - Modules: {terminal.ModuleManager.Modules.Count}" +
+#endif
+			$"";
 		Header.Draw();
 
 		// Draw Output Area

@@ -37,7 +37,7 @@ public class Terminal
 		ScreenManager.Start();
 		ModuleManager.Start();
 
-		Console.Title = $"CTerm: {ScreenManager.CurrentID}";
+		Console.Title = $"CTerm: {ScreenManager.CurrentScreen}";
 
 #if DEBUG && WINDOWS
 #pragma warning disable CA1416 // Validate platform compatibility
