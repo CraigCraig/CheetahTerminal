@@ -1,45 +1,79 @@
 namespace CheetahTerminal;
 
-using CheetahApp;
+#region Using Statements
+using System;
+using System.Threading;
+using CheetahTerminal.Modules;
+using CheetahUtils;
+#endregion
 
-public class Terminal : ConsoleApp
+public class Terminal
 {
-    /// <summary>
-    /// The core terminal application
-    /// </summary>
-    public static ConsoleApp? Core { get; private set; }
+	public ScreenManager ScreenManager { get; private set; }
+	public ModuleManager ModuleManager { get; private set; }
 
-    public Terminal() : base(new(), new())
-    {
-        Core = this;
-    }
+	private bool _isClosing;
 
-    public override void Start()
-    {
-        base.Start();
-        Core?.Start();
-    }
+	public Terminal(string[] args)
+	{
+		Log.Clear();
+		Log.Write("CheetahTerminal v1.0");
+		Log.Write($"AppData: {FolderPaths.LocalAppData}");
+		Log.Write($"ProgramFiles: {FolderPaths.LocalAppData}");
+		Log.Write($"Plugins: {FolderPaths.Plugins}");
+		Console.CursorVisible = false;
+		ScreenManager = new ScreenManager(this);
+		ModuleManager = new ModuleManager(this);
+	}
 
-    public override void Update()
-    {
-        base.Update();
-        Core?.Update();
-    }
+	public void Start()
+	{
+		Console.TreatControlCAsInput = true;
+		Console.CancelKeyPress += (sender, e) =>
+		{
+			e.Cancel = true;
+		};
 
-    public override void Command(CommandContext context)
-    {
-        base.Command(context);
-    }
+		ScreenManager.Start();
+		ModuleManager.Start();
 
-    public override void Close()
-    {
-        base.Close();
-        Core?.Close();
-    }
+		Console.Title = $"CTerm: {ScreenManager.CurrentID}";
 
-    public static void Main(string[] args)
-    {
-        Core = new ConsoleApp(new(), new());
-        Core.Start();
-    }
+#if DEBUG && WINDOWS
+#pragma warning disable CA1416 // Validate platform compatibility
+		Console.Title += " (D)";
+#pragma warning restore CA1416 // Validate platform compatibility
+#endif
+
+		while (true)
+		{
+			if (_isClosing) break;
+			Update();
+			Thread.Sleep(1);
+		}
+	}
+
+	private DateTime lastUpdate = DateTime.MinValue;
+	public void Update()
+	{
+		if (Console.KeyAvailable)
+		{
+			ScreenManager.HandleKeyPress();
+			ScreenManager.Draw();
+			lastUpdate = DateTime.Now;
+		}
+
+		if (DateTime.Now - lastUpdate > TimeSpan.FromSeconds(1))
+		{
+			ScreenManager.Draw();
+			lastUpdate = DateTime.Now;
+		}
+	}
+
+	public void Close()
+	{
+		_isClosing = true;
+		ScreenManager.Close();
+		ModuleManager.Close();
+	}
 }

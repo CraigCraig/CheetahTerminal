@@ -1,0 +1,16 @@
+[
+  {
+    "Name": "CTerm Debug",
+    "Projects": [
+      {
+        "Name": "Debugger\\Debugger.csproj",
+        "Action": "StartWithoutDebugging",
+        "DebugTarget": ""
+      },
+      {
+        "Name": "CheetahTerminal.csproj",
+        "Action": "Start"
+      }
+    ]
+  }
+]
