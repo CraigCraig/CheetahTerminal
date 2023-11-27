@@ -49,8 +49,14 @@ public partial class Screen
             switch (key)
             {
                 case ConsoleKey.D1:
+                    terminal.ScreenManager.SwitchScreen(1);
                     return;
-                    // TODO: Handle D2 - D9
+                case ConsoleKey.D2:
+                    terminal.ScreenManager.SwitchScreen(2);
+                    return;
+                case ConsoleKey.D3:
+                    terminal.ScreenManager.SwitchScreen(3);
+                    return;
             }
         }
 
@@ -132,5 +138,11 @@ public partial class Screen
     internal void Close()
     {
         throw new NotImplementedException();
+    }
+
+    internal void Redraw()
+    {
+        Header.Redraw();
+        Prompt.Redraw();
     }
 }
