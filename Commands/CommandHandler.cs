@@ -11,10 +11,12 @@ public class CommandHandler(Terminal terminal, Module module)
     public readonly Module Module = module;
     private readonly List<Command> _commands = [];
 
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1822:Mark members as static", Justification = "WIP")]
     public void Start()
     {
     }
 
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1822:Mark members as static", Justification = "WIP")]
     public void Stop()
     {
     }

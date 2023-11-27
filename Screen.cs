@@ -111,7 +111,11 @@ public partial class Screen
         }
 
         // Draw Header
-        Header.Text = $"CTerm: {Id} - {DateTime.Now}";
+        Header.Text = $"CTerm v1.0" +
+#if DEBUG
+            $" (Debug)" +
+#endif
+            $" - Screen: {Id} - {DateTime.Now}";
         Header.Draw();
 
         // Draw Output Area

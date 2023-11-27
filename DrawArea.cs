@@ -111,7 +111,7 @@ public class DrawArea(Vector2i position, Vector2i size, bool pinToBottom = false
             fColor = color.Value;
         }
 
-        PixelBuffer.TryGetValue(ppos, out ConsolePixel? value);
+        _ = PixelBuffer.TryGetValue(ppos, out ConsolePixel? value);
 
         if (value == null)
         {

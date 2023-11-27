@@ -47,14 +47,21 @@ public class Terminal
         }
     }
 
+    private DateTime lastUpdate = DateTime.MinValue;
     public void Update()
     {
         if (Console.KeyAvailable)
         {
             ScreenManager.HandleKeyPress();
+            ScreenManager.Draw();
+            lastUpdate = DateTime.Now;
         }
 
-        ScreenManager.Draw();
+        if (DateTime.Now - lastUpdate > TimeSpan.FromSeconds(1))
+        {
+            ScreenManager.Draw();
+            lastUpdate = DateTime.Now;
+        }
     }
 
     public void Close()
