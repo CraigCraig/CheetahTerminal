@@ -57,6 +57,10 @@ public partial class Screen
                 case ConsoleKey.D3:
                     terminal.ScreenManager.SwitchScreen(3);
                     return;
+                case ConsoleKey.RightArrow:
+                    return;
+                case ConsoleKey.LeftArrow:
+                    return;
             }
         }
 
@@ -76,6 +80,7 @@ public partial class Screen
 
         if (key == ConsoleKey.Tab)
         {
+            // TODO: Auto Completion
             return;
         }
 
