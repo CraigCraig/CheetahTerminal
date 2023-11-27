@@ -6,6 +6,7 @@
     <Nullable>enable</Nullable>
     <Platforms>Windows;Linux</Platforms>
     <Configurations>Debug;Release</Configurations>
+    <OutputPath>..\..\..\bin\$(Platform)\$(Configuration)\Plugins\</OutputPath>
   </PropertyGroup>
 
   <ItemGroup>

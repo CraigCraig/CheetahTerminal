@@ -8,17 +8,12 @@ using CheetahTerminal.Commands;
 /// </summary>
 /// <param name="name"></param>
 /// <param name="description"></param>
-public class Module
+public class Module(ModuleInfo info)
 {
     public Terminal? Terminal { get; private set; }
     public bool IsCore { get; private set; } = false;
-    public string Name { get; private set; }
+    public ModuleInfo Info { get; private set; } = info;
     public CommandHandler? CommandHandler { get; private set; }
-
-    public Module()
-    {
-        Name = GetType().Name;
-    }
 
     public void SetTerminal(Terminal terminal)
     {

@@ -67,7 +67,7 @@ public class ModuleManager(Terminal terminal)
     {
         foreach (var module in Modules)
         {
-            if (module.Name == command)
+            if (module.Info.Name == command)
             {
                 return module;
             }

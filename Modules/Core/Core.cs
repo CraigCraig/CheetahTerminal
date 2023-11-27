@@ -4,7 +4,7 @@ using CheetahTerminal.Modules;
 
 public class Core : Module
 {
-    public Core() : base()
+    public Core() : base(new ModuleInfo("core"))
     {
     }
 

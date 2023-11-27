@@ -10,6 +10,7 @@
     <OutputType>Exe</OutputType>
     <AssemblyName>Terminal</AssemblyName>
     <RootNamespace>CheetahTerminal</RootNamespace>
+    <OutputPath>bin\$(Platform)\$(Configuration)\</OutputPath>
   </PropertyGroup>
 	
   <PropertyGroup Condition="'$(Platform)' == 'Windows' ">

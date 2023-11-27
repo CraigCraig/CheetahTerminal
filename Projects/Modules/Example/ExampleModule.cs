@@ -2,7 +2,15 @@
 
 using CheetahTerminal.Modules;
 
-public class ExampleModule : Module
+public class Example : Module
 {
-    // TODO: Load Module
+    public Example() : base(new ModuleInfo("core"))
+    {
+        // TODO: Add Commands
+    }
+
+    public override void Start()
+    {
+        base.Start();
+    }
 }
