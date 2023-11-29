@@ -48,8 +48,10 @@ public class ConsolePixel(Vector2i position, char character, ConsoleColor foregr
 		if (!IsDirty) { return; }
 		IsDirty = false;
 
-		Console.ForegroundColor = _foregroundColor;
-		Console.BackgroundColor = _backgroundColor;
+		if (Console.ForegroundColor != _foregroundColor)
+			Console.ForegroundColor = _foregroundColor;
+		if (Console.BackgroundColor != _backgroundColor)
+			Console.BackgroundColor = _backgroundColor;
 		Console.SetCursorPosition(_position.X, _position.Y);
 		Console.Write(_character);
 	}

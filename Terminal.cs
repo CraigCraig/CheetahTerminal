@@ -49,24 +49,30 @@ public class Terminal
 		{
 			if (_isClosing) break;
 			Update();
-			Thread.Sleep(1);
+			//Thread.Sleep(1);
 		}
 	}
 
 	private DateTime lastUpdate = DateTime.MinValue;
 	public void Update()
 	{
-		if (Console.KeyAvailable)
+		bool keyWasAvailable = false;
+		while (Console.KeyAvailable)
 		{
+			keyWasAvailable = true;
 			ScreenManager.HandleKeyPress();
+			lastUpdate = DateTime.UtcNow;
+		}
+		if (keyWasAvailable)
+		{
 			ScreenManager.Draw();
-			lastUpdate = DateTime.Now;
+
 		}
 
-		if (DateTime.Now - lastUpdate > TimeSpan.FromSeconds(1))
+		if (DateTime.UtcNow - lastUpdate > TimeSpan.FromSeconds(1))
 		{
 			ScreenManager.Draw();
-			lastUpdate = DateTime.Now;
+			lastUpdate = DateTime.UtcNow;
 		}
 	}
 
