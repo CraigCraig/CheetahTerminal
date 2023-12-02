@@ -97,38 +97,37 @@ public static class Terminal
 		ConsoleKey key = keyInfo.Key;
 		char c = keyInfo.KeyChar;
 
-		if (key == ConsoleKey.Enter)
+		switch (key)
 		{
-			string cmd = LastInput.ToString().Split(' ')[0];
-			string[] args = LastInput.ToString().Split(' ').Skip(1).ToArray();
-			Console.Clear();
-			var result = ModuleManager.ExecuteCommand(cmd, args);
-			if (result != null)
-			{
-				Output.Add(result.Message);
-			}
-			_ = LastInput.Clear();
-			return;
-		}
+			case ConsoleKey.Enter:
+				{
+					if (string.IsNullOrEmpty(LastInput.ToString())) return;
 
-		if (key == ConsoleKey.Backspace)
-		{
-			if (LastInput.Length > 0)
-			{
-				_ = LastInput.Remove(LastInput.Length - 1, 1);
-			}
-			return;
-		}
+					string cmd = LastInput.ToString().Split(' ')[0];
+					string[] args = LastInput.ToString().Split(' ').Skip(1).ToArray();
+					Console.Clear();
+					var result = ModuleManager.ExecuteCommand(cmd, args);
+					if (result != null)
+					{
+						Output.Add(result.Message);
+					}
+					_ = LastInput.Clear();
+					return;
+				}
 
-		if (key == ConsoleKey.Tab)
-		{
-			Output.Clear();
-			_ = LastInput.Clear();
-		}
-
-		if (key == ConsoleKey.Escape)
-		{
-			System.Environment.Exit(0);
+			case ConsoleKey.Backspace:
+				if (LastInput.Length > 0)
+				{
+					_ = LastInput.Remove(LastInput.Length - 1, 1);
+				}
+				return;
+			case ConsoleKey.Tab:
+				Output.Clear();
+				_ = LastInput.Clear();
+				return;
+			case ConsoleKey.Escape:
+				System.Environment.Exit(0);
+				return;
 		}
 
 		_ = LastInput.Append(c);
@@ -159,7 +158,7 @@ public static class Terminal
 		}
 
 		// Draw Prompt
-		WriteAt(24, $"{Environment.CurrentDirectory} > {LastInput}");
+		WriteAt(24, $"{Environment.CurrentDirectory} > {LastInput}", true);
 
 		ConsoleUtils.Rectangle rect = new(0, 0, (short) Width, (short) Height);
 		_ = ConsoleUtils.WriteConsoleOutputW(OutputHandle, CharBuffer, new ConsoleUtils.Coord((short) Width, (short) Height), new ConsoleUtils.Coord(0, 0), ref rect);
@@ -174,7 +173,7 @@ public static class Terminal
 		}
 	}
 
-	internal static void WriteAt(int y, string line)
+	internal static void WriteAt(int y, string line, bool placeCursorAfter = false)
 	{
 		line = $"[{y}] {line}";
 		ClearLine(y);
@@ -182,6 +181,10 @@ public static class Terminal
 		{
 			CharBuffer[i + (y * 80)].Char = line[i];
 			CharBuffer[i + (y * 80)].Attributes = 7;
+		}
+		if (placeCursorAfter)
+		{
+			Console.SetCursorPosition(line.Length, y);
 		}
 	}
 
