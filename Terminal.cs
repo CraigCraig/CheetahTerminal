@@ -175,7 +175,6 @@ public static class Terminal
 
 	internal static void WriteAt(int y, string line, bool placeCursorAfter = false)
 	{
-		line = $"[{y}] {line}";
 		ClearLine(y);
 		for (int i = 0; i < line.Length; i++)
 		{
