@@ -16,8 +16,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests", "Projects\Tests\Tests.csproj", "{341B8C26-7277-435F-B096-44D822C8AEBA}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CHE Script", "Projects\Modules\CHE-Script\CHE Script\CHE Script.csproj", "{AD1BB40D-6C53-4BE6-9307-D33EB220E6F5}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Dependencies", "Dependencies", "{C81051D4-1A89-48EA-B752-828727CACB73}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CheetahUtils", "Projects\Dependencies\CheetahUtils\CheetahUtils.csproj", "{A2EA34B8-638A-4204-92B8-6F638D3CA18F}"
@@ -54,14 +52,6 @@ Global
 		{341B8C26-7277-435F-B096-44D822C8AEBA}.Release|Linux.Build.0 = Release|Linux
 		{341B8C26-7277-435F-B096-44D822C8AEBA}.Release|Windows.ActiveCfg = Release|Windows
 		{341B8C26-7277-435F-B096-44D822C8AEBA}.Release|Windows.Build.0 = Release|Windows
-		{AD1BB40D-6C53-4BE6-9307-D33EB220E6F5}.Debug|Linux.ActiveCfg = Debug|Linux
-		{AD1BB40D-6C53-4BE6-9307-D33EB220E6F5}.Debug|Linux.Build.0 = Debug|Linux
-		{AD1BB40D-6C53-4BE6-9307-D33EB220E6F5}.Debug|Windows.ActiveCfg = Debug|Windows
-		{AD1BB40D-6C53-4BE6-9307-D33EB220E6F5}.Debug|Windows.Build.0 = Debug|Windows
-		{AD1BB40D-6C53-4BE6-9307-D33EB220E6F5}.Release|Linux.ActiveCfg = Release|Linux
-		{AD1BB40D-6C53-4BE6-9307-D33EB220E6F5}.Release|Linux.Build.0 = Release|Linux
-		{AD1BB40D-6C53-4BE6-9307-D33EB220E6F5}.Release|Windows.ActiveCfg = Release|Windows
-		{AD1BB40D-6C53-4BE6-9307-D33EB220E6F5}.Release|Windows.Build.0 = Release|Windows
 		{A2EA34B8-638A-4204-92B8-6F638D3CA18F}.Debug|Linux.ActiveCfg = Debug|Linux
 		{A2EA34B8-638A-4204-92B8-6F638D3CA18F}.Debug|Linux.Build.0 = Debug|Linux
 		{A2EA34B8-638A-4204-92B8-6F638D3CA18F}.Debug|Windows.ActiveCfg = Debug|Windows
@@ -76,7 +66,6 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{3DEF8978-0CB9-41FE-A55A-D216E1D24AD7} = {981A33FC-AC1F-4E2E-B7FF-A49A1BB9B52B}
-		{AD1BB40D-6C53-4BE6-9307-D33EB220E6F5} = {981A33FC-AC1F-4E2E-B7FF-A49A1BB9B52B}
 		{A2EA34B8-638A-4204-92B8-6F638D3CA18F} = {C81051D4-1A89-48EA-B752-828727CACB73}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
