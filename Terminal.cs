@@ -1,28 +1,52 @@
-namespace CheetahTerminal;
+﻿namespace CheetahTerminal;
 
 #region Using Statements
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using CheetahTerminal.Modules;
 using CheetahUtils;
 using Microsoft.Win32.SafeHandles;
 #endregion
 
+/// <summary>
+/// This class contains information about the environment for the terminal
+/// </summary>
+public class TerminalEnvironment
+{
+	public string CurrentDirectory { get; set; } = Environment.CurrentDirectory;
+	public string HomeDirectory { get; set; } = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+}
+
 public static class Terminal
 {
+	public static TerminalEnvironment Environment { get; } = new TerminalEnvironment();
 	public static string Version { get; } = typeof(Terminal).Assembly.GetName().Version?.ToString() ?? string.Empty;
 	public static ShutdownRequest? ShutdownRequest { get; set; }
+	public static int Width = 80;
+	public static int Height = 25;
 	internal static ConsoleUtils.CharInfo[] CharBuffer { get; set; } = new ConsoleUtils.CharInfo[80 * 25];
 	internal static SafeFileHandle OutputHandle { get; set; } = ConsoleUtils.CreateFile("CONOUT$", 0x40000000, 2, IntPtr.Zero, FileMode.Open, 0, IntPtr.Zero);
-	internal static ConsoleUtils.Rectangle Rect { get; set; } = new ConsoleUtils.Rectangle(0, 0, 80, 25);
+
+	internal static StringBuilder LastInput { get; } = new();
+	internal static List<string> Output { get; } = [];
+
+	internal static int CursorX { get; set; } = 0;
+	internal static int CursorY { get; set; } = 0;
 
 	internal static void Initialize(string[] args)
 	{
 		Log.PrintToConsole = true;
 		Log.Clear();
-		Log.Write($"CheetahTerminal v{Version}");
+		Log.Write($"CheetahTerminal v{Version}" +
+#if DEBUG
+			$" (Debug)" +
+#endif
+			$"");
 
 		if (args.Length > 0)
 		{
@@ -31,20 +55,17 @@ public static class Terminal
 
 		if (OutputHandle.IsInvalid) throw new Exception("outputHandle is invalid!");
 
+		ModuleManager.Start();
 		Start();
 	}
 
 	internal static void Start()
 	{
-		// Fill CharBuffer with empty spaces
-		for (int i = 0; i < CharBuffer.Length; i++)
-		{
-			CharBuffer[i].Char = 'a';
-			CharBuffer[i].Attributes = 1;
-		}
-
 		List<Task> tasks = [];
 
+		Output.Add($"Welcome to CheetahTerminal!");
+		Output.Add($"	Try typing 'help'");
+		
 		tasks.Add(Task.Run(() =>
 		{
 			while (true)
@@ -59,109 +80,107 @@ public static class Terminal
 			while (true)
 			{
 				if (ShutdownRequest != null) break;
-				UpdateBuffer();
+				UpdateOutput();
 				Thread.Sleep(1);
 			}
 		}));
 
+		Environment.CurrentDirectory = Environment.HomeDirectory;
 		Task.WaitAll([.. tasks]);
 	}
 
 	internal static void UpdateInput()
 	{
 		ConsoleKeyInfo keyInfo = Console.ReadKey(true);
+		Console.SetCursorPosition(CursorX, CursorY);
 		ConsoleKey key = keyInfo.Key;
+		char c = keyInfo.KeyChar;
+
+		if (key == ConsoleKey.Enter)
+		{
+			string cmd = LastInput.ToString().Split(' ')[0];
+			string[] args = LastInput.ToString().Split(' ').Skip(1).ToArray();
+
+			var result = ModuleManager.ExecuteCommand(cmd, args);
+			if (result != null)
+			{
+				Output.Add(result.Message);
+			}
+			_ = LastInput.Clear();
+			return;
+		}
+
+		if (key == ConsoleKey.Backspace)
+		{
+			if (LastInput.Length > 0)
+			{
+				_ = LastInput.Remove(LastInput.Length - 1, 1);
+			}
+			return;
+		}
 
 		if (key == ConsoleKey.Tab)
 		{
-			// Fill CharBuffer with random characters
-			for (int i = 0; i < CharBuffer.Length; i++)
-			{
-				CharBuffer[i].Char = (char)Random.Shared.Next(32, 128);
-				CharBuffer[i].Attributes = (short)Random.Shared.Next(0, 15);
-			}
+			Output.Clear();
+			_ = LastInput.Clear();
+		}
+
+		_ = LastInput.Append(c);
+	}
+
+	internal static void UpdateOutput()
+	{
+		// Fill CharBuffer with empty spaces
+		for (int i = 0; i < CharBuffer.Length; i++)
+		{
+			CharBuffer[i].Char = ' ';
+			CharBuffer[i].Attributes = 1;
+		}
+
+		// Draw Header
+		WriteAt(0, DateTime.Now.ToString());
+
+		// Draw Output
+		int y = 23;
+		string[] output = [.. Output];
+		Array.Reverse(output);
+		string[] tmp = output.Take(y).ToArray();
+
+		foreach (string s in tmp)
+		{
+			WriteAt(y, s);
+			y--;
+		}
+
+		// Draw Prompt
+		WriteAt(24, $"{Environment.CurrentDirectory} > {LastInput}");
+
+		ConsoleUtils.Rectangle rect = new(0, 0, (short) Width, (short) Height);
+		ConsoleUtils.WriteConsoleOutputW(OutputHandle, CharBuffer, new ConsoleUtils.Coord((short) Width, (short) Height), new ConsoleUtils.Coord(0, 0), ref rect);
+	}
+
+	internal static void ClearLine(int y)
+	{
+		for (int i = 0; i < 80; i++)
+		{
+			CharBuffer[i + (y * 80)].Char = ' ';
+			CharBuffer[i + (y * 80)].Attributes = 0;
 		}
 	}
 
-	internal static void UpdateBuffer()
+	internal static void WriteAt(int y, string line)
 	{
-		ConsoleUtils.Rectangle rect = Rect;
-		ConsoleUtils.WriteConsoleOutputW(OutputHandle, CharBuffer, new ConsoleUtils.Coord(80, 25), new ConsoleUtils.Coord(0, 0), ref rect);
+		line = $"[{y}] {line}";
+		ClearLine(y);
+		for (int i = 0; i < line.Length; i++)
+		{
+			CharBuffer[i + (y * 80)].Char = line[i];
+			CharBuffer[i + (y * 80)].Attributes = 7;
+		}
 	}
 
 	internal static void Stop()
 	{
 
 	}
-
-	//public void Start()
-	//{
-	//	Console.TreatControlCAsInput = true;
-	//	Console.CancelKeyPress += (sender, e) =>
-	//	{
-	//		e.Cancel = true;
-	//	};
-
-	//	Rect = new ConsoleUtils.Rectangle(0, 0, 80, 25);
-
-	//	Log.PrintToConsole = true;
-	//	Log.Clear();
-	//	Log.Write($"CheetahTerminal v{Version}");
-	//	Log.Write($"AppData: {FolderPaths.LocalAppData}");
-	//	Log.Write($"ProgramFiles: {FolderPaths.LocalAppData}");
-	//	Log.Write($"Plugins: {FolderPaths.Plugins}");
-	//	Console.CursorVisible = false;
-
-	//	ModuleManager.Start();
-
-	//	List<Task> tasks = [];
-
-	//	tasks.Add(Task.Run(() =>
-	//	{
-	//		while (!_isClosing)
-	//		{
-	//			HandleInput();
-	//			Thread.Sleep(1);
-	//		}
-	//	}));
-
-	//	tasks.Add(Task.Run(() =>
-	//	{
-	//		while (!_isClosing)
-	//		{
-	//			HandleOutput();
-	//			Thread.Sleep(1);
-	//		}
-	//	}));
-
-	//	Task.WaitAll([.. tasks]);
-	//}
-
-	//public void HandleInput()
-	//{
-	//	InputHandler.Update();
-	//	if (!Console.KeyAvailable) return;
-	//	ConsoleKeyInfo key = Console.ReadKey(true);
-	//	if (key.Key == ConsoleKey.Escape)
-	//	{
-	//		Console.Clear();
-	//		Console.WriteLine($"Do you really want to exit?{Environment.NewLine}Hit escape to confirm, any other key to abort.");
-	//		key = Console.ReadKey(true);
-	//		if (key.Key == ConsoleKey.Escape)
-	//		{
-	//			Close();
-	//		}
-	//	}
-	//}
-
-	//public void HandleOutput()
-	//{
-
-	//}
-
-	//public void Close()
-	//{
-	//	_isClosing = true;
-	//	ModuleManager.Close();
-	//}
 }

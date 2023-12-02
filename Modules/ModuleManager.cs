@@ -8,11 +8,11 @@ using System.Reflection;
 using CheetahTerminal.Commands;
 #endregion
 
-public class ModuleManager()
+public static class ModuleManager
 {
-	public List<Module> Modules { get; private set; } = [];
+	public static List<Module> Modules { get; private set; } = [];
 
-	public void Start()
+	public static void Start()
 	{
 		// TODO: Load modules from DLLs
 		string pluginsPath = FolderPaths.Plugins;
@@ -48,29 +48,16 @@ public class ModuleManager()
 							{
 								if (type2 == null || string.IsNullOrEmpty(type2.FullName)) continue;
 								if (assembly.CreateInstance(type2.FullName) is not Command command) continue;
-								module.AddCommand(command);
+								module.Commands.Add(command);
 							}
 						}
 					}
 				}
 			}
-
-			foreach (Module module in Modules)
-			{
-				module.Start();
-			}
 		}
 	}
 
-	public void Close()
-	{
-		foreach (Module module in Modules)
-		{
-			module.Stop();
-		}
-	}
-
-	public Module? GetModule(string command)
+	public static Module? GetModule(string command)
 	{
 		foreach (Module module in Modules)
 		{
@@ -82,16 +69,27 @@ public class ModuleManager()
 		return null;
 	}
 
-	internal CommandResult? ExecuteCommand(string moduleName, string[] cmdArgs)
+	internal static CommandResult? ExecuteCommand(string command, string[] cmdArgs)
 	{
-		Module? module = GetModule(moduleName);
-
-		if (module == null)
+		foreach (Module module in Modules)
 		{
-			return new CommandResult(false, "Module Not Found");
+			foreach (Command cmd in module.Commands)
+			{
+				if (cmd.Name.ToLower().Equals(command.ToLower()))
+				{
+					return cmd.Execute(new CommandContext(module, command, cmdArgs));
+				}
+			}
 		}
-		string cmd = cmdArgs[0];
-		CommandResult? result = module.CommandHandler?.HandleCommand(cmd, cmdArgs);
-		return result;
+		return new CommandResult(false, $"Command Not Found: {command}");
+		//Module? module = GetModule(moduleName);
+
+		//if (module == null)
+		//{
+		//	return new CommandResult(false, "Module Not Found");
+		//}
+		//string cmd = cmdArgs[0];
+		//CommandResult? result = module.CommandHandler?.HandleCommand(cmd, cmdArgs);
+		//return result;
 	}
 }
