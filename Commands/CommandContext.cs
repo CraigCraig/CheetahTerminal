@@ -2,17 +2,12 @@
 
 using CheetahTerminal.Modules;
 
-public class CommandContext(Module module, Screen screen, string name, string[] args)
+public class CommandContext(Module module, string name, string[] args)
 {
 	/// <summary>
 	/// The module this command belongs to
 	/// </summary>
 	public Module Module { get; private set; } = module;
-
-	/// <summary>
-	/// The screen this command was executed in
-	/// </summary>
-	public Screen Screen { get; private set; } = screen;
 
 	/// <summary>
 	/// The name of the command executed

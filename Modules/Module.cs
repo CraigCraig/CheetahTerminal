@@ -10,14 +10,12 @@ using CheetahTerminal.Commands;
 /// <param name="description"></param>
 public class Module(ModuleInfo info)
 {
-	public Terminal? Terminal { get; private set; }
 	public ModuleInfo Info { get; private set; } = info;
 	public CommandHandler? CommandHandler { get; private set; }
 
-	internal void SetTerminal(Terminal terminal)
+	internal void Initialize()
 	{
-		Terminal = terminal;
-		CommandHandler = new(terminal, this);
+		CommandHandler = new(this);
 	}
 
 	public virtual void Start()
