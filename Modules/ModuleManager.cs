@@ -5,7 +5,9 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using System.Text;
 using CheetahTerminal.Commands;
+using CheetahUtils;
 #endregion
 
 public static class ModuleManager
@@ -71,6 +73,19 @@ public static class ModuleManager
 
 	internal static CommandResult? ExecuteCommand(string command, string[] cmdArgs)
 	{
+		// TODO: Split commands by | and execute them in order, allowing for piping
+		if (command.StartsWith('?'))
+		{
+			command = command[1..];
+			if (string.IsNullOrEmpty(command)) return new CommandResult(false, "No Module Specified");
+
+			StringBuilder response = new();
+
+			response.Append($"Modules");
+
+			return new CommandResult(true, response.ToString());
+		}
+
 		foreach (Module module in Modules)
 		{
 			foreach (Command cmd in module.Commands)

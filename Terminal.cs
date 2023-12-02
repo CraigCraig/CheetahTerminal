@@ -103,7 +103,8 @@ public static class Terminal
 			{
 				case ConsoleKey.C:
 					{
-						ShutdownRequest = new ShutdownRequest();
+						LastInput.Clear();
+						Output.Clear();
 						return;
 					}
 			}
@@ -190,12 +191,16 @@ public static class Terminal
 		ClearLine(y);
 		for (int i = 0; i < line.Length; i++)
 		{
-			CharBuffer[i + (y * 80)].Char = line[i];
-			CharBuffer[i + (y * 80)].Attributes = 7;
+			CharBuffer[i + (y * Width)].Char = line[i];
+			CharBuffer[i + (y * Width)].Attributes = 7;
 		}
 		if (placeCursorAfter)
 		{
-			Console.SetCursorPosition(line.Length, y);
+			try
+			{
+				Console.SetCursorPosition(line.Length, y);
+			}
+			catch { }
 		}
 	}
 
