@@ -97,6 +97,18 @@ public static class Terminal
 		ConsoleKey key = keyInfo.Key;
 		char c = keyInfo.KeyChar;
 
+		if (keyInfo.Modifiers == ConsoleModifiers.Control)
+		{
+			switch (key)
+			{
+				case ConsoleKey.C:
+					{
+						ShutdownRequest = new ShutdownRequest();
+						return;
+					}
+			}
+		}
+
 		switch (key)
 		{
 			case ConsoleKey.Enter:
@@ -114,7 +126,6 @@ public static class Terminal
 					_ = LastInput.Clear();
 					return;
 				}
-
 			case ConsoleKey.Backspace:
 				if (LastInput.Length > 0)
 				{
@@ -126,7 +137,7 @@ public static class Terminal
 				_ = LastInput.Clear();
 				return;
 			case ConsoleKey.Escape:
-				System.Environment.Exit(0);
+				ShutdownRequest = new ShutdownRequest();
 				return;
 		}
 
@@ -175,6 +186,7 @@ public static class Terminal
 
 	internal static void WriteAt(int y, string line, bool placeCursorAfter = false)
 	{
+		// TODO: Line wrapping
 		ClearLine(y);
 		for (int i = 0; i < line.Length; i++)
 		{
