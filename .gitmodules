@@ -1,6 +1,3 @@
-[submodule "Projects/Modules/CHE-Script"]
-	path = Projects/Modules/CHE-Script
-	url = git@github.com:Kanedsodas/CHE-Script.git
 [submodule "Projects/Dependencies/CheetahUtils"]
 	path = Projects/Dependencies/CheetahUtils
-	url = git@github.com:CraigCraig/CheetahUtils.git
+	url = https://CraigCraig/CheetahUtils.git
