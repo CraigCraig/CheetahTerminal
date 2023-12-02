@@ -40,6 +40,7 @@ public static class Terminal
 
 	internal static void Initialize(string[] args)
 	{
+		Console.TreatControlCAsInput = true;
 		Log.PrintToConsole = true;
 		Log.Clear();
 		Log.Write($"CheetahTerminal v{Version}" +
@@ -100,7 +101,7 @@ public static class Terminal
 		{
 			string cmd = LastInput.ToString().Split(' ')[0];
 			string[] args = LastInput.ToString().Split(' ').Skip(1).ToArray();
-
+			Console.Clear();
 			var result = ModuleManager.ExecuteCommand(cmd, args);
 			if (result != null)
 			{
@@ -123,6 +124,11 @@ public static class Terminal
 		{
 			Output.Clear();
 			_ = LastInput.Clear();
+		}
+
+		if (key == ConsoleKey.Escape)
+		{
+			System.Environment.Exit(0);
 		}
 
 		_ = LastInput.Append(c);
@@ -156,7 +162,7 @@ public static class Terminal
 		WriteAt(24, $"{Environment.CurrentDirectory} > {LastInput}");
 
 		ConsoleUtils.Rectangle rect = new(0, 0, (short) Width, (short) Height);
-		ConsoleUtils.WriteConsoleOutputW(OutputHandle, CharBuffer, new ConsoleUtils.Coord((short) Width, (short) Height), new ConsoleUtils.Coord(0, 0), ref rect);
+		_ = ConsoleUtils.WriteConsoleOutputW(OutputHandle, CharBuffer, new ConsoleUtils.Coord((short) Width, (short) Height), new ConsoleUtils.Coord(0, 0), ref rect);
 	}
 
 	internal static void ClearLine(int y)

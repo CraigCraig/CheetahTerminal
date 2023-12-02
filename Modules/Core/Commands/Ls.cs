@@ -11,7 +11,7 @@ public class Ls() : Command("ls", "")
 		StringBuilder output = new();
 		foreach (var entry in Directory.GetFileSystemEntries(Terminal.Environment.CurrentDirectory))
 		{
-			output.AppendLine(entry);
+			_ = output.AppendLine(entry);
 		}
 		return new CommandResult(true, output.ToString());
 	}
