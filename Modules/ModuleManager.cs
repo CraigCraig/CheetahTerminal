@@ -14,6 +14,21 @@ public static class ModuleManager
 {
 	public static List<Module> Modules { get; private set; } = [];
 
+	public static int ModuleCount => Modules.Count;
+
+	public static int CommandCount
+	{
+		get
+		{
+			int count = 0;
+			foreach (Module module in Modules)
+			{
+				count += module.Commands.Count;
+			}
+			return count;
+		}
+	}
+
 	public static void Start()
 	{
 		// TODO: Load modules from DLLs

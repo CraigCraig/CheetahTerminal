@@ -66,7 +66,7 @@ public static class Terminal
 
 		Output.Add($"Welcome to CheetahTerminal!");
 		Output.Add($"	Try typing 'help'");
-		
+
 		tasks.Add(Task.Run(() =>
 		{
 			while (true)
@@ -88,6 +88,8 @@ public static class Terminal
 
 		Environment.CurrentDirectory = Environment.HomeDirectory;
 		Task.WaitAll([.. tasks]);
+		Console.Clear();
+		Console.WriteLine("CheetahTerminal Terminated..");
 	}
 
 	internal static void UpdateInput()
@@ -119,6 +121,8 @@ public static class Terminal
 					string cmd = LastInput.ToString().Split(' ')[0];
 					string[] args = LastInput.ToString().Split(' ').Skip(1).ToArray();
 					Console.Clear();
+					Output.Clear();
+
 					var result = ModuleManager.ExecuteCommand(cmd, args);
 					if (result != null)
 					{
@@ -178,21 +182,22 @@ public static class Terminal
 
 	internal static void ClearLine(int y)
 	{
-		for (int i = 0; i < 80; i++)
+		for (int i = 0; i < Width; i++)
 		{
-			CharBuffer[i + (y * 80)].Char = ' ';
-			CharBuffer[i + (y * 80)].Attributes = 0;
+			CharBuffer[i + (y * Width)].Char = ' ';
+			CharBuffer[i + (y * Width)].Attributes = 0;
 		}
 	}
 
 	internal static void WriteAt(int y, string line, bool placeCursorAfter = false)
 	{
-		// TODO: Line wrapping
+		// TODO: Line Wrapping
+		if (line.Length > Width) return;
+
 		ClearLine(y);
 		for (int i = 0; i < line.Length; i++)
 		{
-			CharBuffer[i + (y * Width)].Char = line[i];
-			CharBuffer[i + (y * Width)].Attributes = 7;
+			WriteAt(i, y, line[i], 7);
 		}
 		if (placeCursorAfter)
 		{
@@ -202,6 +207,12 @@ public static class Terminal
 			}
 			catch { }
 		}
+	}
+
+	internal static void WriteAt(int x, int y, char c, short attributes)
+	{
+		CharBuffer[x + (y * Width)].Char = c;
+		CharBuffer[x + (y * Width)].Attributes = attributes;
 	}
 
 	internal static void Stop()
