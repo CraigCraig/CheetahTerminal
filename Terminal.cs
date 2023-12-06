@@ -40,10 +40,15 @@ public static class Terminal
 
 	internal static void Initialize(string[] args)
 	{
+#if WINDOWS
+#pragma warning disable CA1416 // Validate platform compatibility
+		//Installer.Start();
+#pragma warning restore CA1416 // Validate platform compatibility
+#endif
 		Console.TreatControlCAsInput = true;
 		Log.PrintToConsole = true;
 		Log.Clear();
-		Log.Write($"CheetahTerminal v{Version}" +
+		Output.Add($"CheetahTerminal v{Version}" +
 #if DEBUG
 			$" (Debug)" +
 #endif
@@ -51,7 +56,14 @@ public static class Terminal
 
 		if (args.Length > 0)
 		{
-			return;
+			string command = args[0];
+			string[] arguments = args.Skip(1).ToArray();
+
+			if (!command.StartsWith('-'))
+			{
+				Output.Add("Invalid flags");
+				return;
+			}
 		}
 
 		if (OutputHandle.IsInvalid) throw new Exception("outputHandle is invalid!");

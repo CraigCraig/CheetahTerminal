@@ -6,8 +6,8 @@
     <Nullable>enable</Nullable>
     <Platforms>Windows;Linux</Platforms>
     <Configurations>Debug;Release</Configurations>
-    <AssemblyName>Example.plugin</AssemblyName>
-    <OutputPath>..\..\..\bin\$(Platform)\$(Configuration)\Plugins\</OutputPath>
+    <AssemblyName>Example.module</AssemblyName>
+    <OutputPath>..\..\..\bin\$(Platform)\$(Configuration)\Modules\</OutputPath>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
   </PropertyGroup>
@@ -16,6 +16,7 @@
     <ProjectReference Include="..\..\..\CheetahTerminal.csproj">
       <CopyLocalSatelliteAssemblies>False</CopyLocalSatelliteAssemblies>
       <Private>False</Private>
+      <ReferenceOutputAssembly>True</ReferenceOutputAssembly>
     </ProjectReference>
   </ItemGroup>
 

@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <LangVersion>latest</LangVersion>
+    <Platforms>Windows;Linux</Platforms>
+    <Configurations>Debug;Release</Configurations>
+    <AssemblyVersion>1.0.0</AssemblyVersion>
+    <OutputType>Exe</OutputType>
+    <AssemblyName>Sudo</AssemblyName>
+    <RootNamespace>Sudo</RootNamespace>
+    <OutputPath>bin\$(Platform)\$(Configuration)\Apps\</OutputPath>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+    <StartupObject>Sudo.Program</StartupObject>
+  </PropertyGroup>
+  
+  <PropertyGroup Condition="'$(Platform)' == 'Windows' ">
+    <DefineConstants>WINDOWS</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Platform)' == 'Linux' ">
+    <DefineConstants>LINUX</DefineConstants>
+  </PropertyGroup>
+  
+</Project>

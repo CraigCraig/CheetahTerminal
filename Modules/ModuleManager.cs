@@ -32,10 +32,10 @@ public static class ModuleManager
 	public static void Start()
 	{
 		// TODO: Load modules from DLLs
-		string pluginsPath = FolderPaths.Plugins;
-		foreach (string entry in Directory.GetFiles(pluginsPath))
+		string modulesPath = FolderPaths.Modules;
+		foreach (string entry in Directory.GetFiles(modulesPath))
 		{
-			if (entry.EndsWith(".plugin.dll"))
+			if (entry.EndsWith(".module.dll"))
 			{
 				Assembly assembly = Assembly.LoadFile(entry);
 			}

@@ -1,15 +1,41 @@
 namespace CheetahTerminal;
 
+#region Using Statements
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Runtime.Versioning;
 using System.Threading.Tasks;
+using CheetahUtils;
+using Microsoft.Win32;
+#endregion
 
 public static class Installer
 {
-	public static void Install()
+	[SupportedOSPlatform("windows")]
+	private static bool IsInstalled()
 	{
+		var result = Registry.LocalMachine.GetSubKeyNames();
+		foreach (var r in result)
+		{
+			Console.WriteLine(r);
+		}
+		return Directory.Exists(Path.Combine(FolderPaths.ProgramFiles));
+	}
+
+	[SupportedOSPlatform("windows")]
+	public static void Start()
+	{
+		// TODO: Check if installed
+		Log.Write("Installing CheetahTerminal..");
+		// WIP: Registry Entries
+		RegistryKey? key = Registry.LocalMachine?.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall", true);
+		if (key == null)
+		{
+			Registry.LocalMachine?.SetValue("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall", true);
+		}
+
 		if (!Directory.Exists(FolderPaths.LocalAppData))
 		{
 			_ = Directory.CreateDirectory(FolderPaths.LocalAppData);
@@ -31,7 +57,7 @@ public static class Installer
 		{
 			Task task = Task.Run(() =>
 			{
-				if (o.Id != Environment.ProcessId)
+				if (o.Id != Environment.ProcessId && o.StartInfo.WorkingDirectory.Equals(FolderPaths.ProgramFiles))
 				{
 					Console.WriteLine($"Killing Old CheetahTerminal: pid {o.Id}");
 					o.Kill();
@@ -103,7 +129,7 @@ public static class Installer
 		//Console.WriteLine($"Program Path: {Path.Combine(path, "CBash.exe")}");
 	}
 
-	public static void CopyFolder(string source, string target, bool overwrite = false)
+	private static void CopyFolder(string source, string target, bool overwrite = false)
 	{
 		if (!Directory.Exists(target))
 		{

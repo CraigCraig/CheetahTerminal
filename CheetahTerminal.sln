@@ -4,21 +4,23 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.9.34310.174
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CheetahTerminal", "CheetahTerminal.csproj", "{B6DDB00F-8573-4647-BF33-F6949E752926}"
+	ProjectSection(ProjectDependencies) = postProject
+		{F130805A-82EF-48C9-9DAE-8681B7E73E2C} = {F130805A-82EF-48C9-9DAE-8681B7E73E2C}
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Modules", "Modules", "{981A33FC-AC1F-4E2E-B7FF-A49A1BB9B52B}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Example", "Projects\Modules\Example\Example.csproj", "{3DEF8978-0CB9-41FE-A55A-D216E1D24AD7}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{A12468E0-9784-48D8-A274-D538454B08E6}"
-	ProjectSection(SolutionItems) = preProject
-		.editorconfig = .editorconfig
-	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests", "Projects\Tests\Tests.csproj", "{341B8C26-7277-435F-B096-44D822C8AEBA}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Dependencies", "Dependencies", "{C81051D4-1A89-48EA-B752-828727CACB73}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CheetahUtils", "Projects\Dependencies\CheetahUtils\CheetahUtils.csproj", "{A2EA34B8-638A-4204-92B8-6F638D3CA18F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Apps", "Apps", "{4A26D5C3-28D8-4CA6-BFA7-7B710F4AAE2C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sudo", "Sudo\Sudo.csproj", "{F130805A-82EF-48C9-9DAE-8681B7E73E2C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -60,6 +62,14 @@ Global
 		{A2EA34B8-638A-4204-92B8-6F638D3CA18F}.Release|Linux.Build.0 = Release|Linux
 		{A2EA34B8-638A-4204-92B8-6F638D3CA18F}.Release|Windows.ActiveCfg = Release|Windows
 		{A2EA34B8-638A-4204-92B8-6F638D3CA18F}.Release|Windows.Build.0 = Release|Windows
+		{F130805A-82EF-48C9-9DAE-8681B7E73E2C}.Debug|Linux.ActiveCfg = Debug|Linux
+		{F130805A-82EF-48C9-9DAE-8681B7E73E2C}.Debug|Linux.Build.0 = Debug|Linux
+		{F130805A-82EF-48C9-9DAE-8681B7E73E2C}.Debug|Windows.ActiveCfg = Debug|Windows
+		{F130805A-82EF-48C9-9DAE-8681B7E73E2C}.Debug|Windows.Build.0 = Debug|Windows
+		{F130805A-82EF-48C9-9DAE-8681B7E73E2C}.Release|Linux.ActiveCfg = Release|Linux
+		{F130805A-82EF-48C9-9DAE-8681B7E73E2C}.Release|Linux.Build.0 = Release|Linux
+		{F130805A-82EF-48C9-9DAE-8681B7E73E2C}.Release|Windows.ActiveCfg = Release|Windows
+		{F130805A-82EF-48C9-9DAE-8681B7E73E2C}.Release|Windows.Build.0 = Release|Windows
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -67,6 +77,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{3DEF8978-0CB9-41FE-A55A-D216E1D24AD7} = {981A33FC-AC1F-4E2E-B7FF-A49A1BB9B52B}
 		{A2EA34B8-638A-4204-92B8-6F638D3CA18F} = {C81051D4-1A89-48EA-B752-828727CACB73}
+		{F130805A-82EF-48C9-9DAE-8681B7E73E2C} = {4A26D5C3-28D8-4CA6-BFA7-7B710F4AAE2C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3ABFE3E5-BA59-405B-B7D8-D5E305825E71}
