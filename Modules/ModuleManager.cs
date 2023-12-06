@@ -5,32 +5,47 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using System.Text;
 using CheetahTerminal.Commands;
+using CheetahUtils;
 #endregion
 
-public class ModuleManager(Terminal terminal)
+public static class ModuleManager
 {
-	public Terminal Terminal { get; } = terminal;
-	public List<Module> Modules { get; private set; } = [];
+	public static List<Module> Modules { get; private set; } = [];
 
-	public void Start()
+	public static int ModuleCount => Modules.Count;
+
+	public static int CommandCount
+	{
+		get
+		{
+			int count = 0;
+			foreach (Module module in Modules)
+			{
+				count += module.Commands.Count;
+			}
+			return count;
+		}
+	}
+
+	public static void Start()
 	{
 		// TODO: Load modules from DLLs
-		var pluginsPath = FolderPaths.Plugins;
-		foreach (var entry in Directory.GetFiles(pluginsPath))
+		string pluginsPath = FolderPaths.Plugins;
+		foreach (string entry in Directory.GetFiles(pluginsPath))
 		{
 			if (entry.EndsWith(".plugin.dll"))
 			{
-				var assembly = Assembly.LoadFile(entry);
+				Assembly assembly = Assembly.LoadFile(entry);
 			}
 		}
 
 		// Load modules from all assemblies
-		var assemblies = AppDomain.CurrentDomain.GetAssemblies();
-		foreach (var assembly in assemblies)
+		foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
 		{
-			var types = assembly.GetTypes();
-			foreach (var type in types)
+			Type[] types = assembly.GetTypes();
+			foreach (Type type in types)
 			{
 				if (type.BaseType == null || type.BaseType.FullName == null) continue;
 				if (type.BaseType.FullName.Equals(typeof(Module).FullName))
@@ -39,42 +54,29 @@ public class ModuleManager(Terminal terminal)
 					if (assembly.FullName == null) continue;
 					if (assembly.CreateInstance(type.FullName) is Module module)
 					{
-						module.SetTerminal(Terminal);
+						module.Initialize();
 						Modules.Add(module);
 
 						// Add Commands from Modules Namespace
-						foreach (var type2 in types)
+						foreach (Type type2 in types)
 						{
 							if (type2.BaseType == null || type2.BaseType.FullName == null) continue;
 							if (!type2.BaseType.FullName.Equals(typeof(Command).FullName)) continue;
 							{
 								if (type2 == null || string.IsNullOrEmpty(type2.FullName)) continue;
 								if (assembly.CreateInstance(type2.FullName) is not Command command) continue;
-								module.AddCommand(command);
+								module.Commands.Add(command);
 							}
 						}
 					}
 				}
 			}
-
-			foreach (var module in Modules)
-			{
-				module.Start();
-			}
 		}
 	}
 
-	public void Close()
+	public static Module? GetModule(string command)
 	{
-		foreach (var module in Modules)
-		{
-			module.Stop();
-		}
-	}
-
-	public Module? GetModule(string command)
-	{
-		foreach (var module in Modules)
+		foreach (Module module in Modules)
 		{
 			if (module.Info.Name == command)
 			{
@@ -84,17 +86,40 @@ public class ModuleManager(Terminal terminal)
 		return null;
 	}
 
-	internal CommandResult? ExecuteCommand(Screen screen, string moduleName, string[] cmdArgs)
+	internal static CommandResult? ExecuteCommand(string command, string[] cmdArgs)
 	{
-		var module = GetModule(moduleName);
-
-		if (module == null)
+		// TODO: Split commands by | and execute them in order, allowing for piping
+		if (command.StartsWith('?'))
 		{
-			return new CommandResult(false, "Module Not Found");
+			command = command[1..];
+			if (string.IsNullOrEmpty(command)) return new CommandResult(false, "No Module Specified");
+
+			StringBuilder response = new();
+
+			response.Append($"Modules");
+
+			return new CommandResult(true, response.ToString());
 		}
 
-		var cmd = cmdArgs[0];
-		var result = module.CommandHandler?.HandleCommand(screen, cmd, cmdArgs);
-		return result;
+		foreach (Module module in Modules)
+		{
+			foreach (Command cmd in module.Commands)
+			{
+				if (cmd.Name.ToLower().Equals(command.ToLower()))
+				{
+					return cmd.Execute(new CommandContext(module, command, cmdArgs));
+				}
+			}
+		}
+		return new CommandResult(false, $"Command Not Found: {command}");
+		//Module? module = GetModule(moduleName);
+
+		//if (module == null)
+		//{
+		//	return new CommandResult(false, "Module Not Found");
+		//}
+		//string cmd = cmdArgs[0];
+		//CommandResult? result = module.CommandHandler?.HandleCommand(cmd, cmdArgs);
+		//return result;
 	}
 }

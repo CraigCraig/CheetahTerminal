@@ -1,6 +1,6 @@
 ﻿namespace CheetahTerminal.Modules;
 
-using System;
+using System.Collections.Generic;
 using CheetahTerminal.Commands;
 
 /// <summary>
@@ -10,31 +10,11 @@ using CheetahTerminal.Commands;
 /// <param name="description"></param>
 public class Module(ModuleInfo info)
 {
-	public Terminal? Terminal { get; private set; }
 	public ModuleInfo Info { get; private set; } = info;
-	public CommandHandler? CommandHandler { get; private set; }
+	public List<Command> Commands { get; private set; } = [];
 
-	internal void SetTerminal(Terminal terminal)
+	internal void Initialize()
 	{
-		Terminal = terminal;
-		CommandHandler = new(terminal, this);
-	}
-
-	public virtual void Start()
-	{
-		if (CommandHandler == null) throw new NullReferenceException(nameof(CommandHandler));
-		CommandHandler.Start();
-	}
-
-	public virtual void Stop()
-	{
-		if (CommandHandler == null) throw new NullReferenceException(nameof(CommandHandler));
-		CommandHandler.Stop();
-	}
-
-	internal void AddCommand(Command command)
-	{
-		if (CommandHandler == null) throw new NullReferenceException(nameof(CommandHandler));
-		CommandHandler.AddCommand(command);
+		Terminal.Output.Add($"Module: {Info.Name} initialized.");
 	}
 }

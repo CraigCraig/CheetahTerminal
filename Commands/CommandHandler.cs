@@ -5,9 +5,8 @@ using System.Collections.Generic;
 using Module = Modules.Module;
 #endregion
 
-public class CommandHandler(Terminal terminal, Module module)
+public class CommandHandler(Module module)
 {
-	private readonly Terminal _terminal = terminal;
 	public readonly Module Module = module;
 	private readonly List<Command> _commands = [];
 
@@ -21,7 +20,7 @@ public class CommandHandler(Terminal terminal, Module module)
 	{
 	}
 
-	public CommandResult? HandleCommand(Screen screen, string command, string[] arguments)
+	public CommandResult? HandleCommand(string command, string[] arguments)
 	{
 		if (string.IsNullOrEmpty(command))
 		{
@@ -32,7 +31,7 @@ public class CommandHandler(Terminal terminal, Module module)
 		{
 			if (cmd.Name == command)
 			{
-				return cmd.Execute(new CommandContext(Module, screen, command, arguments));
+				return cmd.Execute(new CommandContext(Module, command, arguments));
 			}
 		}
 

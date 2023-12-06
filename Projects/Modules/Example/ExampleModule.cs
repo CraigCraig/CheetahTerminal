@@ -8,9 +8,4 @@ public class Example : Module
 	{
 		// TODO: Add Commands
 	}
-
-	public override void Start()
-	{
-		base.Start();
-	}
 }
