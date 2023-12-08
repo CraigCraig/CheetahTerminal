@@ -27,8 +27,8 @@ public static class Terminal
 	public static TerminalEnvironment Environment { get; } = new TerminalEnvironment();
 	public static string Version { get; } = typeof(Terminal).Assembly.GetName().Version?.ToString() ?? string.Empty;
 	public static ShutdownRequest? ShutdownRequest { get; set; }
-	public static int Width = 80;
-	public static int Height = 25;
+	public static int Width { get; set; } = 80;
+	public static int Height { get; set; } = 25;
 	internal static ConsoleUtils.CharInfo[] CharBuffer { get; set; } = new ConsoleUtils.CharInfo[80 * 25];
 	internal static SafeFileHandle OutputHandle { get; set; } = ConsoleUtils.CreateFile("CONOUT$", 0x40000000, 2, IntPtr.Zero, FileMode.Open, 0, IntPtr.Zero);
 
@@ -117,7 +117,7 @@ public static class Terminal
 			{
 				case ConsoleKey.C:
 					{
-						LastInput.Clear();
+						_ = LastInput.Clear();
 						Output.Clear();
 						return;
 					}
