@@ -24,3 +24,6 @@ trim_trailing_whitespace = true
 
 # IDE2000: Avoid multiple blank lines
 dotnet_diagnostic.IDE2000.severity = warning
+
+# CA2101: Specify marshaling for P/Invoke string arguments
+dotnet_diagnostic.CA2101.severity = none
