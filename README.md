@@ -10,6 +10,7 @@ Please check back later for updates.<br>
 
 <a href="https://github.com/CraigCraig/CheetahUtils"><img src="https://craigcraig.vercel.app/api/pin/?username=CraigCraig&repo=CheetahUtils&theme=dark" alt="CheetahApp"></a>
 <a href="https://github.com/CraigCraig/CheetahApp"><img src="https://craigcraig.vercel.app/api/pin/?username=CraigCraig&repo=CheetahApp&theme=dark" alt="CheetahApp"></a>
+<a href="https://github.com/CraigCraig/CheetahApp"><img src="https://craigcraig.vercel.app/api/pin/?username=CraigCraig&repo=CheetahToolbox&theme=dark" alt="CheetahToolbox"></a>
 <a href="https://github.com/moudey/Shell"><img src="https://craigcraig.vercel.app/api/pin/?username=moudey&repo=Shell&theme=dark" alt="CheetahApp"></a>
 
 </div>
