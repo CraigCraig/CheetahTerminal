@@ -24,12 +24,15 @@
   </PropertyGroup>
 
 	<ItemGroup>
+	  <Compile Remove="Apps\**" />
 	  <Compile Remove="Projects\**" />
 	  <Compile Remove="publish\**" />
 	  <Compile Remove="Sudo\**" />
+	  <EmbeddedResource Remove="Apps\**" />
 	  <EmbeddedResource Remove="Projects\**" />
 	  <EmbeddedResource Remove="publish\**" />
 	  <EmbeddedResource Remove="Sudo\**" />
+	  <None Remove="Apps\**" />
 	  <None Remove="Projects\**" />
 	  <None Remove="publish\**" />
 	  <None Remove="Sudo\**" />
